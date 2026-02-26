@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Result</title>
+    <style>
+        table { border-collapse: collapse; width: 80%; margin-top: 20px; }
+        th, td { border: 1px solid #999; padding: 6px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+<h2>✅ Import Completed</h2>
+
+<p><strong>Inserted records:</strong> {{ inserted }}</p>
+<p><strong>Skipped records:</strong> {{ skipped }}</p>
+
+{% if skipped_details %}
+    <h3>Skipped Row Details:</h3>
+    <table>
+        <tr>
+            <th>Excel Row #</th>
+            <th>Reason</th>
+        </tr>
+        {% for row_num, reason in skipped_details %}
+        <tr>
+            <td>{{ row_num }}</td>
+            <td class="error">{{ reason }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+<br>
+<a href="/staff">View Staff Master</a><br>
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>

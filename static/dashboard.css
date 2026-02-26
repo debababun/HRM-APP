@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    padding: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+.nav {
+    margin-top: 20px;
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 12px 18px;
+    margin-right: 10px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.nav-btn:hover {
+    background: #0056b3;
+}
+
+.logout {
+    background: #dc3545;
+}
+
+.logout:hover {
+    background: #a71d2a;
+}

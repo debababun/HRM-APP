@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Staff</title>
+</head>
+<body>
+
+<h2>✏ Edit Staff</h2>
+
+<form method="post">
+
+<p><strong>PF No:</strong> {{ staff.pf_no }}</p>
+<hr>
+
+<label>Name:</label><br>
+<input type="text" name="name" value="{{ staff.name }}"><br><br>
+
+<label>Designation:</label><br>
+<input type="text" name="designation" value="{{ staff.designation }}"><br><br>
+
+<label>HRMS ID:</label><br>
+<input type="text" name="hrms_id" value="{{ staff.hrms_id }}"><br><br>
+
+<label>Community:</label><br>
+<input type="text" name="community" value="{{ staff.community }}"><br><br>
+
+<label>Date of Joining:</label><br>
+<input type="text" name="date_of_joining" value="{{ staff.date_of_joining }}"><br><br>
+
+<label>Date of Birth:</label><br>
+<input type="text" name="dob" value="{{ staff.dob }}"><br><br>
+
+<label>Date of Retirement:</label><br>
+<input type="text" name="dor" value="{{ staff.dor }}"><br><br>
+
+<label>Mobile:</label><br>
+<input type="text" name="mobile" value="{{ staff.mobile }}"><br><br>
+
+<label>Email:</label><br>
+<input type="text" name="email" value="{{ staff.email }}"><br><br>
+
+<label>CLI Name:</label><br>
+<input type="text" name="cli_name" value="{{ staff.cli_name }}"><br><br>
+
+<label>Qualification:</label><br>
+<input type="text" name="qualification" value="{{ staff.qualification }}"><br><br>
+
+<label>Mode of Appointment:</label><br>
+<input type="text" name="mode_of_appointment" value="{{ staff.mode_of_appointment }}"><br><br>
+
+<label>Bill Unit:</label><br>
+<input type="text" name="bill_unit" value="{{ staff.bill_unit }}"><br><br>
+
+
+<label>DOT:</label><br>
+<input type="text" name="dot" value="{{ staff.dot }}"><br><br>
+
+<label>PAN:</label><br>
+<input type="text" name="pan" value="{{ staff.pan }}"><br><br>
+
+<label>Aadhar:</label><br>
+<input type="text" name="aadhar" value="{{ staff.aadhar }}"><br><br>
+
+<label>Promotion Training:</label><br>
+<input type="text" name="prom_trg" value="{{ staff.prom_trg }}"><br><br>
+
+
+<label>PME Due:</label><br>
+<input type="text" name="pme_due" value="{{ staff.pme_due }}"><br><br>
+
+<label>GR/SR Due:</label><br>
+<input type="text" name="gr_sr_due" value="{{ staff.gr_sr_due }}"><br><br>
+
+<label>Tech Ref Due:</label><br>
+<input type="text" name="tech_ref_due" value="{{ staff.tech_ref_due }}"><br><br>
+
+<label>Gradation:</label><br>
+<input type="text" name="gradation" value="{{ staff.gradation }}"><br><br>
+
+<label>Date of Gradation:</label><br>
+<input type="text" name="date_of_gradation" value="{{ staff.date_of_gradation }}"><br><br>
+
+<label>High Speed Psycho Date:</label><br>
+<input type="text" name="high_speed_psycho_date" value="{{ staff.high_speed_psycho_date }}"><br><br>
+
+<label>Remarks:</label><br>
+<textarea name="remarks" rows="3">{{ staff.remarks }}</textarea><br><br>
+<p><strong>Age:</strong> {{ staff.age }}</p>
+
+<button type="submit">Save Changes</button>
+
+</form>
+
+<br>
+<a href="/staff">⬅ Back to Staff Master</a>
+
+</body>
+</html>

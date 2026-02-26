@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Report</title>
+</head>
+<body>
+
+<h2>📊 Generate Report</h2>
+
+<form method="post">
+
+<label>Report Type:</label><br>
+<select name="report_type" required>
+    <option value="pme">PME Due</option>
+    <option value="gr">GR/SR Due</option>
+    <option value="tech">Tech Ref Due</option>
+    <option value="gradation">Gradation Due</option>
+</select>
+<br><br>
+
+<label>Designation:</label><br>
+<select name="designation">
+    <option value="ALL">ALL</option>
+    {% for d in designations %}
+        <option value="{{ d }}">{{ d }}</option>
+    {% endfor %}
+</select>
+<br><br>
+
+<label>Bill Unit:</label><br>
+<select name="bill_unit">
+    <option value="ALL">ALL</option>
+    {% for b in bill_units %}
+        <option value="{{ b }}">{{ b }}</option>
+    {% endfor %}
+</select>
+<br><br>
+
+<label>Period Type:</label><br>
+<select name="period_type" required>
+    <option value="monthly">Monthly</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="yearly">Yearly</option>
+</select>
+<br><br>
+
+<label>Year:</label><br>
+<input type="number" name="year" required>
+<br><br>
+
+<label>Month (1-12 if Monthly):</label><br>
+<input type="number" name="month">
+<br><br>
+
+<label>Quarter (1-4 if Quarterly):</label><br>
+<input type="number" name="quarter">
+<br><br>
+
+<button type="submit">Generate Report</button>
+
+</form>
+
+<br>
+<a href="/dashboard">⬅ Back to Dashboard</a>
+
+</body>
+</html>

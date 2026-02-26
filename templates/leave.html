@@ -1,0 +1,46 @@
+<h2>Leave Records - {{ staff.name }} ({{ staff.pf_no }})</h2>
+
+<h3>Add Leave</h3>
+
+<form method="post">
+    Leave Type:<br>
+    <input name="leave_type"><br><br>
+
+    From Date:<br>
+    <input type="date" name="from_date"><br><br>
+
+    To Date:<br>
+    <input type="date" name="to_date"><br><br>
+
+    Remarks:<br>
+    <input name="remarks"><br><br>
+
+    <button type="submit">Add Leave</button>
+</form>
+
+<hr>
+
+<h3>Leave History</h3>
+
+<table border="1" cellpadding="5">
+<tr>
+    <th>Type</th>
+    <th>From</th>
+    <th>To</th>
+    <th>Days</th>
+    <th>Remarks</th>
+</tr>
+
+{% for leave in staff.leaves %}
+<tr>
+    <td>{{ leave.leave_type }}</td>
+    <td>{{ leave.from_date }}</td>
+    <td>{{ leave.to_date }}</td>
+    <td>{{ leave.days }}</td>
+    <td>{{ leave.remarks }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/staff">Back to Staff</a>

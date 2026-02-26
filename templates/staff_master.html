@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Master</title>
+    <link rel="stylesheet" href="/static/css/table.css">
+</head>
+<body>
+
+<h2>👨‍💼 Staff Master</h2>
+
+<table border="1" cellpadding="6">
+<tr>
+    <th>PF No</th>
+    <th>Name</th>
+    <th>Designation</th>
+    <th>HRMS ID</th>
+    <th>Community</th>
+    <th>DOB</th>
+    <th>DOJ</th>
+    <th>DOR</th>
+    <th>Bill Unit</th>
+    <th>Mobile</th>
+    <th>Email</th>
+    <th>CLI</th>
+    <th>Qualification</th>
+    <th>Mode</th>
+    <th>Gradation</th>
+    <th>Remarks</th>
+    <th>Actions</th>
+</tr>
+
+{% for s in staff %}
+<tr>
+    <td>{{ s.pf_no }}</td>
+    <td>{{ s.name }}</td>
+    <td>{{ s.designation }}</td>
+    <td>{{ s.hrms_id }}</td>
+    <td>{{ s.community }}</td>
+    <td>{{ s.dob }}</td>
+    <td>{{ s.date_of_joining }}</td>
+    <td>{{ s.dor }}</td>
+    <td>{{ s.bill_unit }}</td>
+    <td>{{ s.mobile }}</td>
+    <td>{{ s.email }}</td>
+    <td>{{ s.cli_name }}</td>
+    <td>{{ s.qualification }}</td>
+    <td>{{ s.mode_of_appointment }}</td>
+    <td>{{ s.gradation }}</td>
+    <td>{{ s.remarks }}</td>
+    <td>
+        <a href="/staff/edit/{{ s.pf_no }}">✏ Edit</a> |
+        <a href="/staff/{{ s.pf_no }}/leave">🗓 Leave</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br><br>
+
+<a href="/staff/add">➕ Add New Staff</a> |
+<a href="/staff/export">⬇ Export Excel</a> |
+<a href="/dashboard">⬅ Back to Dashboard</a>
+
+</body>
+</html>

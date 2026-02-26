@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Result</title>
+</head>
+<body>
+
+<h2>📊 Report Result</h2>
+
+<p>
+    <strong>Report Type:</strong> {{ report_type | upper }} <br>
+    <strong>From:</strong> {{ start_date }} <br>
+    <strong>To:</strong> {{ end_date }}
+</p>
+
+<hr>
+
+{% if results and results|length > 0 %}
+
+<p><strong>Total Records:</strong> {{ results|length }}</p>
+
+<table border="1" cellpadding="6">
+<tr>
+    <th>PF No</th>
+    <th>Name</th>
+    <th>Designation</th>
+    <th>Bill Unit</th>
+
+    {% if report_type == "pme" %}
+        <th>PME Due Date</th>
+    {% elif report_type == "gr" %}
+        <th>GR/SR Due Date</th>
+    {% elif report_type == "tech" %}
+        <th>Tech Ref Due Date</th>
+    {% elif report_type == "gradation" %}
+        <th>Gradation Due Date</th>
+    {% endif %}
+</tr>
+
+{% for s in results %}
+<tr>
+    <td>{{ s.pf_no }}</td>
+    <td>{{ s.name }}</td>
+    <td>{{ s.designation }}</td>
+    <td>{{ s.bill_unit }}</td>
+
+    {% if report_type == "pme" %}
+        <td>{{ s.pme_due }}</td>
+    {% elif report_type == "gr" %}
+        <td>{{ s.gr_sr_due }}</td>
+    {% elif report_type == "tech" %}
+        <td>{{ s.tech_ref_due }}</td>
+    {% elif report_type == "gradation" %}
+        <td>{{ s.date_of_gradation }}</td>
+    {% endif %}
+</tr>
+{% endfor %}
+
+</table>
+
+{% else %}
+    <p style="color:red;"><strong>No records found for selected criteria.</strong></p>
+{% endif %}
+
+<br><br>
+
+<a href="/reports">⬅ Back to Report Page</a>
+<br>
+<a href="/dashboard">🏠 Dashboard</a>
+
+</body>
+</html>

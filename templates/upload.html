@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Staff Excel / CSV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f7;
+            padding: 30px;
+            color: #333;
+        }
+
+        h2 {
+            color: #004080;
+        }
+
+        form {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p.instructions {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #004080;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function showFileName() {
+            const input = document.getElementById('fileInput');
+            const label = document.getElementById('fileLabel');
+            if (input.files.length > 0) {
+                label.textContent = "Selected File: " + input.files[0].name;
+            } else {
+                label.textContent = "No file selected";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h2>📤 Upload Staff Excel / CSV</h2>
+
+<p class="instructions">
+    Select your staff Excel (.xlsx, .xls) or CSV (.csv) file and click Upload.<br>
+    Ensure your Excel has these headers exactly (case-insensitive):<br>
+    <strong>PF NO, EMPLOYEE NAME, DESIGNATION, DATE OF JOINING, HRMS ID, COMMUNITY, DATE OF BIRTH, DATE OF RETIREMENT, QUALIFICATION, MODE OF APPOINTMENT, MOBILE, EMAIL, CLI NAME</strong><br>
+    Extra columns will be ignored, missing required columns will cause errors.
+</p>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" accept=".xlsx,.xls,.csv" onchange="showFileName()" required>
+    <p id="fileLabel">No file selected</p>
+    <button type="submit">Upload</button>
+</form>
+
+<div class="nav-links">
+    <a href="/staff">👨‍💼 View Staff Master</a>
+    <a href="/dashboard">🏠 Back to Dashboard</a>
+</div>
+
+</body>
+</html>
