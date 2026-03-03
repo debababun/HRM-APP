@@ -9,3 +9,4 @@ jinja2
 passlib[bcrypt]
 python-dateutil
 python-multipart
+python-docx
