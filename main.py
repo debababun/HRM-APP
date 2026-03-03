@@ -16,6 +16,10 @@ from excel_import import import_staff_excel
 import pandas as pd
 from io import BytesIO
 
+from docx import Document
+from docx.shared import Inches
+from docx.enum.section import WD_ORIENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 # ================= BASE SETUP =================
 
 app = FastAPI(title="HRMS")
@@ -231,9 +235,7 @@ def update_staff(
 
     return RedirectResponse("/staff", status_code=302)
 
-# =====================================================
 # ================= LEAVE MANAGEMENT ==================
-# =====================================================
 
 @app.get("/staff/{pf_no}/leave", response_class=HTMLResponse)
 def view_leave(request: Request, pf_no: str):
@@ -292,13 +294,8 @@ def add_leave(
 
     return RedirectResponse(f"/staff/{pf_no}/leave", status_code=302)
 
-# =====================================================
-# ================= REPORTS SECTION ===================
-# =====================================================
 
-# =====================================================
 # ================= REPORTS SECTION ===================
-# =====================================================
 
 @app.get("/reports", response_class=HTMLResponse)
 def reports_page(request: Request):
@@ -493,5 +490,166 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
             "inserted": inserted,
             "skipped": skipped,
             "skipped_details": skipped_details
+        }
+    )
+  # ================= ABSENTEE REPORT =================
+
+@app.post("/reports/leave-absentee")
+def generate_absentee_report(
+    bill_unit: str = Form(...),
+    year: int = Form(...),
+    month: int = Form(...),
+    letter_no: str = Form(...),
+    from_officer: str = Form(...),
+    to_officer: str = Form(...),
+    dept: str = Form(...),
+):
+    db = SessionLocal()
+
+    try:
+        # ================= DATE RANGE (Railway Cycle 6th–5th) =================
+        start_date = date(year, month, 6)
+
+        if month == 12:
+            end_date = date(year + 1, 1, 5)
+        else:
+            end_date = date(year, month + 1, 5)
+
+        # ================= FETCH LEAVE WITH STAFF =================
+        leaves = (
+            db.query(Leave)
+            .options(joinedload(Leave.staff))
+            .join(Staff)
+            .filter(
+                Staff.bill_unit == bill_unit,
+                Leave.from_date >= start_date,
+                Leave.to_date <= end_date
+            )
+            .order_by(Leave.from_date)
+            .all()
+        )
+
+        # ================= HEADING BASED ON DESIGNATION =================
+        designations = (
+            db.query(Staff.designation)
+            .filter(Staff.bill_unit == bill_unit)
+            .distinct()
+            .all()
+        )
+
+        designations = [d[0] for d in designations if d[0]]
+
+        if len(designations) == 1:
+            heading_name = designations[0]
+        elif len(designations) > 1:
+            heading_name = "Multiple Designations"
+        else:
+            heading_name = "NIL"
+
+    finally:
+        db.close()
+
+    # ================= CREATE DOCX =================
+    document = Document()
+
+    # ================= LANDSCAPE ORIENTATION =================
+    section = document.sections[0]
+    section.orientation = WD_ORIENT.LANDSCAPE
+    section.page_width, section.page_height = section.page_height, section.page_width
+
+    # Compact margins (single-page fit)
+    section.top_margin = Inches(0.5)
+    section.bottom_margin = Inches(0.5)
+    section.left_margin = Inches(0.5)
+    section.right_margin = Inches(0.5)
+
+    # ================= HEADING =================
+    heading = document.add_heading(
+        f"Absentee statement of {heading_name}/Azimganj",
+        level=1
+    )
+    heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    heading.runs[0].font.underline = True
+
+    # ================= NO & DATE (Same Line) =================
+    table_header1 = document.add_table(rows=1, cols=2)
+    table_header1.autofit = True
+
+    table_header1.rows[0].cells[0].text = f"No: {letter_no}"
+    right_para = table_header1.rows[0].cells[1].paragraphs[0]
+    right_para.text = f"Date: {date.today().strftime('%d.%m.%Y')}"
+    right_para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    # ================= FROM & TO (Same Line) =================
+    table_header2 = document.add_table(rows=1, cols=2)
+    table_header2.autofit = True
+
+    table_header2.rows[0].cells[0].text = f"From: {from_officer}"
+    right_para = table_header2.rows[0].cells[1].paragraphs[0]
+    right_para.text = f"To: {to_officer}"
+    right_para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    # ================= DEPARTMENT =================
+    document.add_paragraph(f"Dept: {dept}")
+
+    # ================= BILL UNIT + PE LINE =================
+    document.add_paragraph(
+        f"Bill Unit No: {bill_unit}    "
+        f"P.E. from {start_date.strftime('%d.%m.%Y')} "
+        f"to {end_date.strftime('%d.%m.%Y')} "
+        f"During the month of {start_date.strftime('%B %Y')}."
+    )
+
+    # ================= MAIN TABLE =================
+    table = document.add_table(rows=1, cols=9)
+    table.style = "Table Grid"
+
+    headers = [
+        "Sl No",
+        "Name",
+        "Designation",
+        "PF No",
+        "Leave Type",
+        "From",
+        "To",
+        "Days",
+        "Remarks"
+    ]
+
+    for i, header in enumerate(headers):
+        table.rows[0].cells[i].text = header
+
+    total_leave_days = 0
+
+    for idx, leave in enumerate(leaves, start=1):
+        row = table.add_row().cells
+        row[0].text = str(idx)
+        row[1].text = leave.staff.name if leave.staff else ""
+        row[2].text = leave.staff.designation if leave.staff else ""
+        row[3].text = leave.pf_no
+        row[4].text = leave.leave_type
+        row[5].text = leave.from_date.strftime("%d.%m.%Y")
+        row[6].text = leave.to_date.strftime("%d.%m.%Y")
+        row[7].text = str(leave.days)
+        row[8].text = leave.remarks or ""
+
+        total_leave_days += leave.days
+
+    # ================= SUMMARY =================
+    document.add_paragraph(
+        f"Total Employees on Leave: {len(leaves)}    "
+        f"Total Leave Days: {total_leave_days}"
+    )
+
+    # ================= EXPORT FILE =================
+    file_stream = BytesIO()
+    document.save(file_stream)
+    file_stream.seek(0)
+
+    return StreamingResponse(
+        file_stream,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": "attachment; filename=absentee_statement.docx"
         }
     )
