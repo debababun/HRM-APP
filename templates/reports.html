@@ -62,6 +62,35 @@
 
 <br>
 <a href="/dashboard">⬅ Back to Dashboard</a>
+<hr>
 
+<h3>📄 Generate Monthly Leave Absentee Statement</h3>
+
+<form method="post" action="/reports/leave-absentee">
+
+<label>Bill Unit:</label><br>
+<input type="text" name="bill_unit" required><br><br>
+
+<label>Year:</label><br>
+<input type="number" name="year" required><br><br>
+
+<label>Month (1-12):</label><br>
+<input type="number" name="month" required><br><br>
+
+<label>No:</label><br>
+<input type="text" name="letter_no" required><br><br>
+
+<label>From:</label><br>
+<input type="text" name="from_officer" required><br><br>
+
+<label>To:</label><br>
+<input type="text" name="to_officer" required><br><br>
+
+<label>Dept:</label><br>
+<input type="text" name="dept" required><br><br>
+
+<button type="submit">Generate Absentee DOCX</button>
+
+</form>
 </body>
 </html>
